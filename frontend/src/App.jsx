@@ -1,24 +1,48 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+import { useEffect, useState } from "react";
+import LoginForm from "./components/LoginForm";
+import Notification from "./components/Notification";
+import BlogSection from "./components/BlogSection";
+import blogService from "./services/blogs";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [user, setUser] = useState(null);
+  const [notification, setNotification] = useState(null);
+
+  const logout = () => {
+    window.localStorage.removeItem("loggedBlogListUser");
+    setUser(null);
+  };
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogListUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      blogService.setToken(user.token);
+      setUser(user);
+    }
+  }, []);
+
+  const addNotification = (message, type) => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 5000);
+  };
 
   return (
-    <div>
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+    <>
+      <Notification notification={notification} />
+      {!user && (
+        <LoginForm addNotification={addNotification} setUser={setUser} />
       )}
-    </div>
-  )
-}
+      {user && (
+        <div>
+          <p>
+            {user.name} logged in <button onClick={logout}>Logout</button>
+          </p>
+        </div>
+      )}
+      {user && <BlogSection user={user} addNotification={addNotification} />}
+    </>
+  );
+};
 
-export default App
+export default App;

@@ -51,13 +51,14 @@ blogsRouter.put("/:id", middleware.userExtractor, async (request, response) => {
     return response.status(403).json({ error: "You are not authorized" });
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(
-    request.params.id,
-    request.body,
-    { new: true, runValidators: true, context: "query" }
-  );
+  blog.title = request.body.title || blog.title;
+  blog.author = request.body.author || blog.author;
+  blog.url = request.body.url || blog.url;
+  blog.likes = request.body.likes || blog.likes;
 
-  return response.json(updatedBlog);
+  blog.save();
+
+  return response.json(blog);
 });
 
 module.exports = blogsRouter;
