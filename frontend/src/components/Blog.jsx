@@ -21,7 +21,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
     <div style={blogStyle}>
       <div>
         {blog.title} {blog.author}
-        <button onClick={toggle}>{showDetails ? "close" : "view"}</button>
+        <button onClick={toggle}>{showDetails ? "hide" : "view"}</button>
         {showDetails && (
           <div>
             <p>{blog.url}</p>
