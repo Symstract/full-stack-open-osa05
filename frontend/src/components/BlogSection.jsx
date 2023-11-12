@@ -11,7 +11,7 @@ const BlogSection = ({ user, addNotification }) => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
-      blogs.sort((blogA, blogB) => blogA.likes - blogB.likes);
+      blogs.sort((blogA, blogB) => blogB.likes - blogA.likes);
       setBlogs(blogs);
     });
   }, []);
@@ -47,12 +47,12 @@ const BlogSection = ({ user, addNotification }) => {
       return;
     }
 
-    const updatedBlogs = [...blogs];
-    const blogIndex = updatedBlogs.findIndex((b) => b.id === blog.id);
-    updatedBlogs[blogIndex] = {
+    const updatedBlogs = [...blogs].filter((b) => b.id !== blog.id);
+    updatedBlogs.push({
       ...updatedBlog,
       user: { name: user.name },
-    };
+    });
+    updatedBlogs.sort((a, b) => b.likes - a.likes);
 
     setBlogs(updatedBlogs);
   };
@@ -82,7 +82,12 @@ const BlogSection = ({ user, addNotification }) => {
         <BlogForm createBlog={createBlog} />
       </Togglable>
       <br />
-      <BlogList blogs={blogs} addLike={addLike} deleteBlog={deleteBlog} />
+      <BlogList
+        blogs={blogs}
+        user={user}
+        addLike={addLike}
+        deleteBlog={deleteBlog}
+      />
     </div>
   );
 };

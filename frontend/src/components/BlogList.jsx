@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 import Blog from "./Blog";
 
-const BlogList = ({ blogs, addLike, deleteBlog }) => {
+const BlogList = ({ blogs, user, addLike, deleteBlog }) => {
   return (
     <div>
       {blogs.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
+          user={user}
           addLike={addLike}
           deleteBlog={deleteBlog}
         />

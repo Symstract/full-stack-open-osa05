@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const Blog = ({ blog, addLike, deleteBlog }) => {
+const Blog = ({ blog, user, addLike, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const blogStyle = {
@@ -18,18 +18,27 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
   };
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} data-cy="blog">
       <div>
         {blog.title} {blog.author}
-        <button onClick={toggle}>{showDetails ? "hide" : "view"}</button>
+        <button onClick={toggle} data-cy="toggle">
+          {showDetails ? "hide" : "view"}
+        </button>
         {showDetails && (
           <div>
             <p>{blog.url}</p>
             <p>
-              {blog.likes} <button onClick={() => addLike(blog)}>like</button>
+              <span data-cy="likes">{blog.likes} </span>
+              <button data-cy="like" onClick={() => addLike(blog)}>
+                like
+              </button>
             </p>
             <p>{blog.user.name}</p>
-            <button onClick={() => deleteBlog(blog)}>remove</button>
+            {user.username === blog.user.username && (
+              <button onClick={() => deleteBlog(blog)} data-cy="delete">
+                remove
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -45,6 +54,7 @@ Blog.propTypes = {
     likes: PropTypes.number.isRequired,
     user: PropTypes.shape({
       name: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
   addLike: PropTypes.func.isRequired,

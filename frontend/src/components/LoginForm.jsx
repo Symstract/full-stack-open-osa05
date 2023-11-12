@@ -35,6 +35,7 @@ const LoginForm = ({ setUser, addNotification }) => {
             value={username}
             name="Username"
             onChange={(e) => setUsername(e.target.value)}
+            data-cy="username"
           />
         </div>
         <div>
@@ -44,9 +45,12 @@ const LoginForm = ({ setUser, addNotification }) => {
             value={password}
             name="Password"
             onChange={(e) => setPassword(e.target.value)}
+            data-cy="password"
           />
         </div>
-        <button type="submit">login</button>
+        <button type="submit" data-cy="login">
+          login
+        </button>
       </form>
     </div>
   );
